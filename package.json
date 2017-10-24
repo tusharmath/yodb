@@ -1,0 +1,37 @@
+{
+  "name": "persistent-kv",
+  "version": "1.0.0",
+  "description": "A pure javascript based persistent key value store",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tusharmath/yodb.git"
+  },
+  "keywords": [
+    "key",
+    "value",
+    "redis",
+    "persistent",
+    "data",
+    "store",
+    "hash"
+  ],
+  "author": "Tushar Mathur <tusharmath@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tusharmath/yodb/issues"
+  },
+  "homepage": "https://github.com/tusharmath/yodb#readme",
+  "devDependencies": {
+    "mocha": "^4.0.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.3"
+  },
+  "dependencies": {
+    "@types/mocha": "^2.2.43",
+    "random-access-file": "^1.8.1"
+  }
+}
