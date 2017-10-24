@@ -3,6 +3,7 @@
  */
 import * as assert from 'assert'
 import {getTableID, HashTable, MAX_TABLE_SIZE} from '../lib/HashTable'
+import {MemoryLogger} from '../lib/Logger'
 
 describe('HashTable', () => {
   describe('MAX_TABLE_SIZE', () => {
@@ -14,7 +15,7 @@ describe('HashTable', () => {
   })
   describe('insertItem()', () => {
     it('should insert items into the database', async () => {
-      const table = new HashTable()
+      const table = new HashTable(new MemoryLogger())
       await table.insertItem('AAA', '123')
       await table.insertItem('BBB', '321')
       const actual = await table.getItem('AAA')
