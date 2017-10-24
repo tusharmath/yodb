@@ -4,12 +4,15 @@
 
 import * as path from 'path'
 import {HashTable} from './lib/HashTable'
+import {FileLogger} from "./lib/Logger";
 
 export const ROOT_PATH = path.resolve('~/.yodb')
 export const DB_PATH = path.resolve(ROOT_PATH, 'db')
 export const META_PATH = path.resolve(ROOT_PATH, 'meta')
 
-const table = new HashTable()
+const table = new HashTable(
+  new FileLogger(DB_PATH)
+)
 
 export const insertItem = async (key: Buffer, value: Buffer) => {
   return table.insertItem(key, value)
