@@ -11,7 +11,7 @@ export type LogHeader = {
   tail?: number
 }
 export class LogEntry {
-  constructor(readonly data: Buffer, readonly tailLogEntry?: number) {
+  constructor(readonly data: Buffer, private tailLogEntry?: number) {
     if (data.length > MAX_LOG_SIZE - MAX_LOG_HEADER_SIZE) {
       throw Error(
         `Message is longer than allowed limit of ${MAX_LOG_SIZE} bytes`
