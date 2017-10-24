@@ -90,3 +90,4 @@ Temporary Items
 .idea/
 *.js
 .yodb/
+*.map
