@@ -55,4 +55,12 @@ export class LogEntry {
     const dataBuffer = new Buffer(this.data)
     return Buffer.concat([headerBuffer, dataBuffer])
   }
+
+  dirName() {
+    return this.digest.slice(0, 2)
+  }
+
+  fileName() {
+    return this.digest.slice(2)
+  }
 }
