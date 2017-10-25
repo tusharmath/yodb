@@ -2,7 +2,6 @@
  * Created by tushar on 24/10/17.
  */
 
-import * as fs from 'fs-extra'
 import {FileLogger} from '../lib/Logger'
 import * as path from 'path'
 import * as assert from 'assert'
@@ -31,9 +30,7 @@ describe('FileLogger', function() {
   })
 
   afterEach(async function() {
-    if (await fs.pathExists(testFilePath)) {
-      await fs.unlink(testFilePath)
-    }
+    await this.logger.purge()
   })
 
   describe('open()', function() {

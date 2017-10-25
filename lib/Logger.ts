@@ -23,31 +23,41 @@ export class FileLogger implements Logger {
     this.writePosition = size
   }
 
+  static async create(file: string) {
+    const logger = new FileLogger(file)
+    await logger.open()
+    return logger
+  }
+
   async close() {
-    this.assertOpen()
-    await fs.close(this.fd)
+    this.getFD()
+    await fs.close(this.getFD())
     this.isOpened = false
   }
 
   async append(data: Buffer) {
-    this.assertOpen()
     const position = this.writePosition
     this.writePosition += data.length
-    await fs.appendFile(this.fd, data)
+    await fs.appendFile(this.getFD(), data)
     return position
   }
 
-  private assertOpen() {
+  private getFD() {
     if (this.isOpened === false) {
       throw Error('Logger needs to be opened first')
     }
+    return this.fd
   }
 
   async read(position: number, length: number): Promise<Buffer> {
-    this.assertOpen()
     const buff = new Buffer(length)
-    const {buffer} = await fs.read(this.fd, buff, 0, buff.length, position)
+    const {buffer} = await fs.read(this.getFD(), buff, 0, buff.length, position)
     return buffer
+  }
+
+  async purge() {
+    if (this.isOpened) await this.close()
+    if (await fs.pathExists(this.file)) await fs.unlink(this.file)
   }
 }
 
