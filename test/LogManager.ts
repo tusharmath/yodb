@@ -3,6 +3,7 @@
  */
 import * as path from 'path'
 import * as assert from 'assert'
+import * as fs from 'fs-extra'
 import {LogManager} from '../lib/LogManager'
 import {LogEntry, ROOT_ENTRY} from '../lib/LogEntry'
 
@@ -13,7 +14,7 @@ describe('LogManager', function() {
   })
 
   afterEach(async function() {
-    await this.logger.purge()
+    await fs.remove(disk)
   })
 
   describe('head()', function() {

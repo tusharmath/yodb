@@ -62,10 +62,6 @@ export class LogManager {
     }
   }
 
-  async purge() {
-    await fs.emptyDir(this.dir)
-  }
-
   async catHash(hash: string): Promise<LogEntry<any>> {
     const buffer = await fs.readFile(this.objectPath(hash))
     return LogEntry.fromBuffer(buffer)
