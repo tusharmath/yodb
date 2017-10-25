@@ -3,12 +3,7 @@
  */
 
 import * as assert from 'assert'
-import {
-  LogEntry,
-  MAX_LOG_HEADER_SIZE,
-  MAX_LOG_SIZE,
-  ROOT_ENTRY
-} from '../lib/LogEntry'
+import {LogEntry, MAX_LOG_HEADER_SIZE, MAX_LOG_SIZE} from '../lib/LogEntry'
 
 describe('LogEntry', () => {
   it('should have data', () => {
@@ -65,25 +60,6 @@ describe('LogEntry', () => {
       const expected =
         '020b243f8f29dcaa400508eaab31819fedae9aa276cdb1a5d16a8a8572b5068e'
       assert.deepEqual(actual, expected)
-    })
-  })
-
-  describe('dirName()', () => {
-    it('should return the first two letters', () => {
-      const buffer = new Buffer('APPLE')
-      const log = new LogEntry(buffer, ROOT_ENTRY)
-      assert.equal(log.dir(), '54')
-    })
-  })
-
-  describe('fileName()', () => {
-    it('should skip the first two letters', () => {
-      const buffer = new Buffer('APPLE')
-      const log = new LogEntry(buffer, ROOT_ENTRY)
-      assert.equal(
-        log.file(),
-        '28557e2ab9ffc0aacd13d473cc6fda99acb9988ec43dcad4f1005752c3113e'
-      )
     })
   })
 })

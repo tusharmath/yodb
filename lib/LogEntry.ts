@@ -4,6 +4,7 @@
 
 import * as crypto from 'crypto'
 import pad = require('pad')
+
 export const MAX_LOG_SIZE = 10 * 1024 // 10kb
 export const MAX_LOG_HEADER_SIZE = 512 // 512byte
 
@@ -57,13 +58,5 @@ export class LogEntry<T> {
 
     // data
     return Buffer.concat([headerBuffer, this.getContentBuffer()])
-  }
-
-  dir() {
-    return this.digest().slice(0, 2)
-  }
-
-  file() {
-    return this.digest().slice(2)
   }
 }
