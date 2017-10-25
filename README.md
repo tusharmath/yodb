@@ -1,2 +1,2 @@
 # yodb
-A Javascript based persistent Key Value storage.
+A Javascript based append only log file.
