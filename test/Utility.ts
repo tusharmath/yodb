@@ -3,19 +3,18 @@
  */
 
 import * as assert from 'assert'
-import {dirName, fileName} from "../lib/Utility";
+import {dirName, fileName} from '../lib/Utility'
 
-describe('Utility', function () {
-
+describe('Utility', function() {
   describe('dirName()', () => {
     it('should skip the first two letters', () => {
-      assert.equal(dirName('AAABBB'), 'ABBB')
+      assert.equal(dirName('AAABBB'), 'AA')
     })
   })
 
   describe('fileName()', () => {
     it('should return the first two letters', () => {
-      assert.equal(fileName('AAABBB'), 'AA')
+      assert.equal(fileName('AAABBB'), 'ABBB')
     })
   })
 })
