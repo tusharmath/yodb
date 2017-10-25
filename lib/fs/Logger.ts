@@ -3,36 +3,30 @@
  */
 
 import * as fs from 'fs-extra'
+import {FileManager} from './FileManager'
 
 export interface Logger {
   append(data: Buffer): Promise<number>
   read(position: number, length: number): Promise<Buffer>
 }
 
-export class FileLogger implements Logger {
-  private fd: number
-  private isOpened = false
+export class FileLogger extends FileManager implements Logger {
   private writePosition: number
 
-  constructor(private file: string) {}
+  constructor(path: string) {
+    super(path, 'w+')
+  }
 
   async open() {
-    this.fd = await fs.open(this.file, 'w+')
-    this.isOpened = true
-    const {size} = await fs.stat(this.file)
+    await super.open()
+    const {size} = await this.stat()
     this.writePosition = size
+    return this
   }
 
   static async create(file: string) {
     const logger = new FileLogger(file)
-    await logger.open()
-    return logger
-  }
-
-  async close() {
-    this.getFD()
-    await fs.close(this.getFD())
-    this.isOpened = false
+    return await logger.open()
   }
 
   async append(data: Buffer) {
@@ -42,21 +36,15 @@ export class FileLogger implements Logger {
     return position
   }
 
-  private getFD() {
-    if (this.isOpened === false) {
-      throw Error('Logger needs to be opened first')
-    }
-    return this.fd
-  }
-
   async read(position: number, length: number): Promise<Buffer> {
     const buff = new Buffer(length)
-    const {buffer} = await fs.read(this.getFD(), buff, 0, buff.length, position)
+    const {buffer} = await fs.read(
+      this.getFD(),
+      buff,
+      0,
+      buff.length,
+      position
+    )
     return buffer
-  }
-
-  async purge() {
-    if (this.isOpened) await this.close()
-    if (await fs.pathExists(this.file)) await fs.unlink(this.file)
   }
 }
