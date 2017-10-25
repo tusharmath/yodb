@@ -4,7 +4,7 @@
 
 import * as crypto from 'crypto'
 import {Logger} from './Logger'
-import {MAX_LOG_SIZE} from "./LogEntry";
+import {LogEntry, MAX_LOG_SIZE} from './LogEntry'
 
 export const MAX_BITS = 32
 export const MAX_TABLE_SIZE = Math.pow(2, MAX_BITS) - 1
@@ -27,11 +27,15 @@ export class HashTable {
   async insertItem(key: BufferLike, value: BufferLike) {
     const buffer = typeof value === 'string' ? Buffer.from(value) : value
     const id = getTableID(key)
-    this.index[id] = await this.db.append(buffer)
+    const log = new LogEntry(buffer)
+    this.index[id] = await this.db.append(log.toBuffer())
   }
 
   async getItem(key: BufferLike): Promise<Buffer> {
     const id = getTableID(key)
-    return await this.db.read(this.index[id], MAX_LOG_SIZE)
+    const log = LogEntry.fromBuffer(
+      await this.db.read(this.index[id], MAX_LOG_SIZE)
+    )
+    return log.data
   }
 }
