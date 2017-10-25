@@ -60,15 +60,3 @@ export class FileLogger implements Logger {
     if (await fs.pathExists(this.file)) await fs.unlink(this.file)
   }
 }
-
-export class MemoryLogger implements Logger {
-  private list: Array<Buffer> = []
-  append(data: Buffer): Promise<number> {
-    this.list.push(data)
-    return Promise.resolve(this.list.length - 1)
-  }
-
-  read(position: number): Promise<Buffer> {
-    return Promise.resolve(this.list[position])
-  }
-}
