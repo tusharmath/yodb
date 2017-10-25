@@ -29,7 +29,7 @@ export class LogEntry<T> {
 
   digest() {
     const hash = crypto.createHash('sha256')
-    hash.update(JSON.stringify(this.content))
+    hash.update(JSON.stringify(this.content) + this.parent)
     return hash.digest().toString('hex')
   }
 

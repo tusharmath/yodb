@@ -63,7 +63,7 @@ describe('LogEntry', () => {
       const log = new LogEntry('APPLE', '12345')
       const actual = log.digest()
       const expected =
-        '08a5621c50e13f24ed076b6845e5681fc5bf371fb61832f6163319bc2bfc73b3'
+        '020b243f8f29dcaa400508eaab31819fedae9aa276cdb1a5d16a8a8572b5068e'
       assert.deepEqual(actual, expected)
     })
   })
@@ -72,7 +72,7 @@ describe('LogEntry', () => {
     it('should return the first two letters', () => {
       const buffer = new Buffer('APPLE')
       const log = new LogEntry(buffer, ROOT_ENTRY)
-      assert.equal(log.dir(), 'd7')
+      assert.equal(log.dir(), '54')
     })
   })
 
@@ -82,7 +82,7 @@ describe('LogEntry', () => {
       const log = new LogEntry(buffer, ROOT_ENTRY)
       assert.equal(
         log.file(),
-        'a43ace186d22c0c1d7b6d7242b53f0b0358ea06e741adbd07f2e84ed31721c'
+        '28557e2ab9ffc0aacd13d473cc6fda99acb9988ec43dcad4f1005752c3113e'
       )
     })
   })

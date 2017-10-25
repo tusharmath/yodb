@@ -27,7 +27,7 @@ describe('LogManager', function () {
       const log = this.logger
       await log.commit({a: 1})
       const head = await log.head()
-      assert.equal(head, '015abd7f5cc57a2dd94b7590f04ad8084273905ee33ec5cebeae62276a97f862')
+      assert.equal(head, '6bf83329e1e72221c455dd73b315265c054d6cdfd4873b9bac0b2585139ab490')
     })
   })
 })
