@@ -12,13 +12,13 @@ import {
 
 describe('LogEntry', () => {
   it('should have data', () => {
-    const message = 'HELLO WORLD'
-    const actual = new LogEntry(Buffer.from(message), '').data
-    const expected = message
-    assert.equal(actual.toString('utf-8'), expected)
+    const content = 'HELLO WORLD'
+    const actual = new LogEntry(content, '').content
+    const expected = content
+    assert.equal(actual, expected)
   })
 
-  it('should throw an error on large messages', () => {
+  it('should throw an error on large contents', () => {
     assert.throws(() => {
       new LogEntry(new Buffer(MAX_LOG_SIZE), '')
     })
@@ -28,31 +28,28 @@ describe('LogEntry', () => {
   })
 
   it('should convert to and fro between buffers', () => {
-    const message = 'APPLE'
-    const log = new LogEntry(new Buffer(message), '')
-    const actual = LogEntry.fromBuffer(log.toBuffer()).data.toString('utf-8')
-    const expected = message
+    const content = 'APPLE'
+    const log = new LogEntry(content, '')
+    const actual = LogEntry.fromBuffer(log.toBuffer()).content
+    const expected = content
     assert.equal(actual, expected)
   })
 
   describe('toBuffer()', () => {
     it('should save data in the end', () => {
-      const buffer = new Buffer('APPLE')
-      const log = new LogEntry(buffer, '')
+      const log = new LogEntry('APPLE', '')
       const actual = log.toBuffer().length
-      const expected = buffer.length + MAX_LOG_HEADER_SIZE
-      assert.equal(actual, expected)
+      assert.equal(actual, '519')
     })
   })
 
   describe('header()', () => {
     it('should return header data', () => {
-      const buffer = new Buffer('APPLE')
-      const log = new LogEntry(buffer, '12345')
+      const log = new LogEntry('APPLE', '12345')
       const actual = log.header()
       const expected = {
         parent: '12345',
-        size: 5
+        size: 7
       }
       assert.deepEqual(actual, expected)
     })
@@ -60,11 +57,10 @@ describe('LogEntry', () => {
 
   describe('digest', () => {
     it('should return header data', () => {
-      const buffer = new Buffer('APPLE')
-      const log = new LogEntry(buffer, '12345')
+      const log = new LogEntry('APPLE', '12345')
       const actual = log.digest
       const expected =
-        '55562347f437d65829303cf6307e71acf8b84a020989dd218f31586eeafd01a9'
+        '08a5621c50e13f24ed076b6845e5681fc5bf371fb61832f6163319bc2bfc73b3'
       assert.deepEqual(actual, expected)
     })
   })
@@ -73,7 +69,7 @@ describe('LogEntry', () => {
     it('should return the first two letters', () => {
       const buffer = new Buffer('APPLE')
       const log = new LogEntry(buffer, ROOT_ENTRY)
-      assert.equal(log.dirName(), '55')
+      assert.equal(log.dirName(), 'd7')
     })
   })
 
@@ -83,7 +79,7 @@ describe('LogEntry', () => {
       const log = new LogEntry(buffer, ROOT_ENTRY)
       assert.equal(
         log.fileName(),
-        '562347f437d65829303cf6307e71acf8b84a020989dd218f31586eeafd01a9'
+        'a43ace186d22c0c1d7b6d7242b53f0b0358ea06e741adbd07f2e84ed31721c'
       )
     })
   })

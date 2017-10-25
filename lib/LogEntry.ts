@@ -14,33 +14,43 @@ export type LogHeader = {
 
 export const ROOT_ENTRY = '<--###ROOT#ENTRY###-->'
 
-export class LogEntry {
+export class LogEntry<T> {
+  readonly contentBuffer: Buffer
   readonly digest: string
 
-  constructor(readonly data: Buffer, private parent: string) {
-    if (data.length > MAX_LOG_SIZE - MAX_LOG_HEADER_SIZE) {
+  constructor(readonly content: T, private parent: string) {
+    this.contentBuffer = this.getContentBuffer()
+    this.digest = this.getDigest()
+  }
+
+  private getContentBuffer() {
+    const buffer = new Buffer(JSON.stringify(this.content))
+    if (buffer.length > MAX_LOG_SIZE - MAX_LOG_HEADER_SIZE) {
       throw Error(
         `Message is longer than allowed limit of ${MAX_LOG_SIZE} bytes`
       )
     }
-
-    const hash = crypto.createHash('sha256')
-    hash.update(data)
-    this.digest = hash.digest().toString('hex')
+    return buffer
   }
 
-  static fromBuffer(buffer: Buffer) {
+  private getDigest() {
+    const hash = crypto.createHash('sha256')
+    hash.update(JSON.stringify(this.content))
+    return hash.digest().toString('hex')
+  }
+
+  static fromBuffer<T>(buffer: Buffer) {
     const {size, parent} = JSON.parse(
       buffer.slice(0, MAX_LOG_HEADER_SIZE).toString('utf-8')
     ) as LogHeader
     const start = MAX_LOG_HEADER_SIZE
-    const data = buffer.slice(start, start + size)
-    return new LogEntry(data, parent)
+    const data = buffer.slice(start, start + size).toString('utf-8')
+    return new LogEntry<T>(JSON.parse(data), parent)
   }
 
   header(): LogHeader {
     return {
-      size: this.data.length,
+      size: this.contentBuffer.length,
       parent: this.parent
     }
   }
@@ -52,8 +62,7 @@ export class LogEntry {
     headerBuffer.write(header, 0, MAX_LOG_HEADER_SIZE, 'utf-8')
 
     // data
-    const dataBuffer = new Buffer(this.data)
-    return Buffer.concat([headerBuffer, dataBuffer])
+    return Buffer.concat([headerBuffer, this.contentBuffer])
   }
 
   dirName() {
