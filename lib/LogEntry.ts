@@ -15,13 +15,7 @@ export type LogHeader = {
 export const ROOT_ENTRY = '<--###ROOT#ENTRY###-->'
 
 export class LogEntry<T> {
-  readonly contentBuffer: Buffer
-  readonly digest: string
-
-  constructor(readonly content: T, private parent: string) {
-    this.contentBuffer = this.getContentBuffer()
-    this.digest = this.getDigest()
-  }
+  constructor(readonly content: T, private parent: string) {}
 
   private getContentBuffer() {
     const buffer = new Buffer(JSON.stringify(this.content))
@@ -33,7 +27,7 @@ export class LogEntry<T> {
     return buffer
   }
 
-  private getDigest() {
+  digest() {
     const hash = crypto.createHash('sha256')
     hash.update(JSON.stringify(this.content))
     return hash.digest().toString('hex')
@@ -50,7 +44,7 @@ export class LogEntry<T> {
 
   header(): LogHeader {
     return {
-      size: this.contentBuffer.length,
+      size: this.getContentBuffer().length,
       parent: this.parent
     }
   }
@@ -62,14 +56,14 @@ export class LogEntry<T> {
     headerBuffer.write(header, 0, MAX_LOG_HEADER_SIZE, 'utf-8')
 
     // data
-    return Buffer.concat([headerBuffer, this.contentBuffer])
+    return Buffer.concat([headerBuffer, this.getContentBuffer()])
   }
 
-  dirName() {
-    return this.digest.slice(0, 2)
+  dir() {
+    return this.digest().slice(0, 2)
   }
 
-  fileName() {
-    return this.digest.slice(2)
+  file() {
+    return this.digest().slice(2)
   }
 }

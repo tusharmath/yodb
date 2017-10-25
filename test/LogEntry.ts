@@ -18,15 +18,6 @@ describe('LogEntry', () => {
     assert.equal(actual, expected)
   })
 
-  it('should throw an error on large contents', () => {
-    assert.throws(() => {
-      new LogEntry(new Buffer(MAX_LOG_SIZE), '')
-    })
-    assert.throws(() => {
-      new LogEntry(new Buffer(MAX_LOG_SIZE - MAX_LOG_HEADER_SIZE / 2), '')
-    })
-  })
-
   it('should convert to and fro between buffers', () => {
     const content = 'APPLE'
     const log = new LogEntry(content, '')
@@ -40,6 +31,18 @@ describe('LogEntry', () => {
       const log = new LogEntry('APPLE', '')
       const actual = log.toBuffer().length
       assert.equal(actual, '519')
+    })
+
+    it('should throw an error on large contents', () => {
+      assert.throws(() => {
+        new LogEntry(new Buffer(MAX_LOG_SIZE), '').toBuffer()
+      })
+      assert.throws(() => {
+        new LogEntry(
+          new Buffer(MAX_LOG_SIZE - MAX_LOG_HEADER_SIZE / 2),
+          ''
+        ).toBuffer()
+      })
     })
   })
 
@@ -55,10 +58,10 @@ describe('LogEntry', () => {
     })
   })
 
-  describe('digest', () => {
+  describe('digest()', () => {
     it('should return header data', () => {
       const log = new LogEntry('APPLE', '12345')
-      const actual = log.digest
+      const actual = log.digest()
       const expected =
         '08a5621c50e13f24ed076b6845e5681fc5bf371fb61832f6163319bc2bfc73b3'
       assert.deepEqual(actual, expected)
@@ -69,7 +72,7 @@ describe('LogEntry', () => {
     it('should return the first two letters', () => {
       const buffer = new Buffer('APPLE')
       const log = new LogEntry(buffer, ROOT_ENTRY)
-      assert.equal(log.dirName(), 'd7')
+      assert.equal(log.dir(), 'd7')
     })
   })
 
@@ -78,7 +81,7 @@ describe('LogEntry', () => {
       const buffer = new Buffer('APPLE')
       const log = new LogEntry(buffer, ROOT_ENTRY)
       assert.equal(
-        log.fileName(),
+        log.file(),
         'a43ace186d22c0c1d7b6d7242b53f0b0358ea06e741adbd07f2e84ed31721c'
       )
     })
