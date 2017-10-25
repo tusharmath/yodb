@@ -3,7 +3,7 @@
  */
 import * as assert from 'assert'
 import {getTableID, HashTable, MAX_TABLE_SIZE} from '../lib/HashTable'
-import {FileLogger} from '../lib/Logger'
+import {FileLogger} from '../lib/fs/Logger'
 import * as path from 'path'
 
 const testFilePath = path.resolve(__dirname, '__data__')

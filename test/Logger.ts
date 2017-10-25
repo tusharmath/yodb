@@ -2,7 +2,7 @@
  * Created by tushar on 24/10/17.
  */
 
-import {FileLogger} from '../lib/Logger'
+import {FileLogger} from '../lib/fs/Logger'
 import * as path from 'path'
 import * as assert from 'assert'
 import {AssertionError} from 'assert'

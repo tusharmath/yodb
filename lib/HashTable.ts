@@ -3,7 +3,7 @@
  */
 
 import * as crypto from 'crypto'
-import {Logger} from './Logger'
+import {Logger} from './fs/Logger'
 import {LogEntry, MAX_LOG_SIZE} from './LogEntry'
 
 export const MAX_BITS = 32

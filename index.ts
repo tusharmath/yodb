@@ -4,7 +4,7 @@
 
 import * as path from 'path'
 import {HashTable} from './lib/HashTable'
-import {FileLogger} from "./lib/Logger";
+import {FileLogger} from "./lib/fs/Logger";
 
 export const ROOT_PATH = path.resolve('~/.yodb')
 export const DB_PATH = path.resolve(ROOT_PATH, 'db')
