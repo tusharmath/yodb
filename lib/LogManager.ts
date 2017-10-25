@@ -8,9 +8,12 @@ import * as path from 'path'
 import {dirName, fileName} from './Utility'
 
 export class LogManager {
+  private isLocked = false
   constructor(private dir: string) {}
 
   async commit<T>(message: T): Promise<string> {
+    this.assertLock()
+    this.lock()
     const head = await this.head()
     const log = new LogEntry(message, head)
     const hash = log.digest()
@@ -18,7 +21,24 @@ export class LogManager {
     await fs.ensureFile(file)
     await fs.writeFile(file, log.toBuffer())
     await fs.writeFile(this.headPath(), hash)
+    this.unlock()
     return hash
+  }
+
+  private lock() {
+    fs.ensureFileSync(this.lockPath())
+    this.isLocked = true
+  }
+
+  private unlock () {
+    fs.unlinkSync(this.lockPath())
+    this.isLocked = false
+  }
+
+  private assertLock() {
+    if (this.isLocked) {
+      throw new TypeError('Only one commit at a time can be made')
+    }
   }
 
   private objectPath(hash: string): string {
@@ -27,6 +47,10 @@ export class LogManager {
 
   private headPath(): string {
     return path.resolve(this.dir, 'HEAD')
+  }
+
+  private lockPath(): string {
+    return path.resolve(this.dir, 'LOCK')
   }
 
   async head(): Promise<string> {

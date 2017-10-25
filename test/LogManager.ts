@@ -16,7 +16,7 @@ describe('LogManager', function() {
     await this.logger.purge()
   })
 
-  describe('head()', async function() {
+  describe('head()', function() {
     it('should return ROOT if nothing is written', async function() {
       const log = this.logger
       const head = await log.head()
@@ -34,7 +34,7 @@ describe('LogManager', function() {
     })
   })
 
-  describe('logs()', async function() {
+  describe('logs()', function() {
     it('should return a range of data', async function() {
       await this.logger.commit(0)
       const hash1 = await this.logger.commit(1)
@@ -47,23 +47,33 @@ describe('LogManager', function() {
 
     it('should handle out of ranges', async function() {
       const hash = await this.logger.commit(0)
-      const actual = await this.logger.logs(0 , Infinity)
+      const actual = await this.logger.logs(0, Infinity)
       assert.deepEqual(actual, [hash])
     })
 
     it('should handle empty files', async function() {
-      const actual = await this.logger.logs(0 , Infinity)
+      const actual = await this.logger.logs(0, Infinity)
       assert.deepEqual(actual, [])
     })
   })
 
-  describe('catHash()', async function() {
+  describe('catHash()', function() {
     it('should read data using digest', async function() {
       const message = 'APPLE'
       const hash = await this.logger.commit(message)
       const actual = await this.logger.catHash(hash)
       const expected = new LogEntry(message, ROOT_ENTRY)
       assert.deepEqual(actual, expected)
+    })
+  })
+
+  describe('commit()', function() {
+    it('should throw if multiple commits are being done simultaneously', async function() {
+      const err = await Promise.all([
+        this.logger.commit('HELLO'),
+        this.logger.commit('WORLD')
+      ]).catch(err => err)
+      assert.equal(err.message, 'Only one commit at a time can be made')
     })
   })
 })
