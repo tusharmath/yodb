@@ -7,6 +7,7 @@ import pad = require('pad')
 
 export const MAX_LOG_SIZE = 10 * 1024 // 10kb
 export const MAX_LOG_HEADER_SIZE = 512 // 512byte
+const HASH_ALGORITHM = 'sha256'
 
 export type LogHeader = {
   size: number
@@ -29,7 +30,7 @@ export class Commit<T> {
   }
 
   digest() {
-    const hash = crypto.createHash('sha256')
+    const hash = crypto.createHash(HASH_ALGORITHM)
     hash.update(JSON.stringify(this.content) + this.parent)
     return hash.digest().toString('hex')
   }

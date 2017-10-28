@@ -5,25 +5,27 @@
 import * as assert from 'assert'
 import {Commit, MAX_LOG_HEADER_SIZE, MAX_LOG_SIZE} from '../lib/Commit'
 
+const TEST_DATA = 'APPLE'
+const TEST_DATA_DIGEST =
+  '020b243f8f29dcaa400508eaab31819fedae9aa276cdb1a5d16a8a8572b5068e'
+
 describe('Commit', () => {
   it('should have data', () => {
-    const content = 'HELLO WORLD'
-    const actual = new Commit(content, '').content
-    const expected = content
+    const actual = new Commit(TEST_DATA, '').content
+    const expected = TEST_DATA
     assert.equal(actual, expected)
   })
 
   it('should convert to and fro between buffers', () => {
-    const content = 'APPLE'
-    const log = new Commit(content, '')
+    const log = new Commit(TEST_DATA, '')
     const actual = Commit.fromBuffer(log.toBuffer()).content
-    const expected = content
+    const expected = TEST_DATA
     assert.equal(actual, expected)
   })
 
   describe('toBuffer()', () => {
     it('should save data in the end', () => {
-      const log = new Commit('APPLE', '')
+      const log = new Commit(TEST_DATA, '')
       const actual = log.toBuffer().length
       assert.equal(actual, '519')
     })
@@ -43,7 +45,7 @@ describe('Commit', () => {
 
   describe('header()', () => {
     it('should return header data', () => {
-      const log = new Commit('APPLE', '12345')
+      const log = new Commit(TEST_DATA, '12345')
       const actual = log.header()
       const expected = {
         parent: '12345',
@@ -55,10 +57,9 @@ describe('Commit', () => {
 
   describe('digest()', () => {
     it('should return header data', () => {
-      const log = new Commit('APPLE', '12345')
+      const log = new Commit(TEST_DATA, '12345')
       const actual = log.digest()
-      const expected =
-        '020b243f8f29dcaa400508eaab31819fedae9aa276cdb1a5d16a8a8572b5068e'
+      const expected = TEST_DATA_DIGEST
       assert.deepEqual(actual, expected)
     })
   })
