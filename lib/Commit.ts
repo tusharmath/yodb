@@ -7,7 +7,7 @@ import pad = require('pad')
 
 export const MAX_LOG_SIZE = 10 * 1024 // 10kb
 export const MAX_LOG_HEADER_SIZE = 512 // 512byte
-const HASH_ALGORITHM = 'sha256'
+const HASH_ALGORITHM = 'md5'
 
 export type LogHeader = {
   size: number

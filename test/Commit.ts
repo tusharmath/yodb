@@ -7,7 +7,7 @@ import {Commit, MAX_LOG_HEADER_SIZE, MAX_LOG_SIZE} from '../lib/Commit'
 
 const TEST_DATA = 'APPLE'
 const TEST_DATA_DIGEST =
-  '020b243f8f29dcaa400508eaab31819fedae9aa276cdb1a5d16a8a8572b5068e'
+  'cb774ca5ef0d497e8bee63606f3a3b3b'
 
 describe('Commit', () => {
   it('should have data', () => {

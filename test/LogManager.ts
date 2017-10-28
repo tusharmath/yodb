@@ -8,6 +8,9 @@ import {LogManager} from '../lib/LogManager'
 import {Commit, ROOT_ENTRY} from '../lib/Commit'
 
 const disk = path.resolve(__dirname, '.yodb')
+
+const TEST_DATA = {a: 1}
+const TEST_DATA_DIGEST = 'f24c2c56bffd7c6eba15f2946a84785a'
 describe('LogManager', function() {
   beforeEach(async function() {
     this.logger = new LogManager(disk)
@@ -26,12 +29,9 @@ describe('LogManager', function() {
 
     it('should return head digest', async function() {
       const log = this.logger
-      await log.commit({a: 1})
+      await log.commit(TEST_DATA)
       const head = await log.head()
-      assert.equal(
-        head,
-        '6bf83329e1e72221c455dd73b315265c054d6cdfd4873b9bac0b2585139ab490'
-      )
+      assert.equal(head, TEST_DATA_DIGEST)
     })
   })
 
