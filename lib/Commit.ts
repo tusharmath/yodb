@@ -14,7 +14,6 @@ export type LogHeader = {
   parent: string
 }
 
-export const ROOT_ENTRY = '<--###ROOT#ENTRY###-->'
 
 export class Commit<T> {
   constructor(readonly content: T, private parent: string) {}

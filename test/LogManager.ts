@@ -4,8 +4,8 @@
 import * as path from 'path'
 import * as assert from 'assert'
 import * as fs from 'fs-extra'
-import {LogManager} from '../lib/LogManager'
-import {Commit, ROOT_ENTRY} from '../lib/Commit'
+import {LogManager, ROOT_ENTRY} from '../lib/LogManager'
+import {Commit} from '../lib/Commit'
 
 const disk = path.resolve(__dirname, '.yodb')
 

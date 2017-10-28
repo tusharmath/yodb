@@ -3,9 +3,11 @@
  */
 
 import * as fs from 'fs-extra'
-import {Commit, ROOT_ENTRY} from './Commit'
+import {Commit} from './Commit'
 import * as path from 'path'
 import {dirName, fileName} from './Utility'
+
+export const ROOT_ENTRY = '<--###ROOT#ENTRY###-->'
 
 export class LogManager {
   private isLocked = false
@@ -30,7 +32,7 @@ export class LogManager {
     this.isLocked = true
   }
 
-  private unlock () {
+  private unlock() {
     fs.unlinkSync(this.lockPath())
     this.isLocked = false
   }
