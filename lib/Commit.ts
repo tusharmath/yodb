@@ -15,7 +15,7 @@ export type LogHeader = {
 
 export const ROOT_ENTRY = '<--###ROOT#ENTRY###-->'
 
-export class LogEntry<T> {
+export class Commit<T> {
   constructor(readonly content: T, private parent: string) {}
 
   private getContentBuffer() {
@@ -40,7 +40,7 @@ export class LogEntry<T> {
     ) as LogHeader
     const start = MAX_LOG_HEADER_SIZE
     const data = buffer.slice(start, start + size).toString('utf-8')
-    return new LogEntry<T>(JSON.parse(data), parent)
+    return new Commit<T>(JSON.parse(data), parent)
   }
 
   header(): LogHeader {

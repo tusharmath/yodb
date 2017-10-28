@@ -3,7 +3,7 @@
  */
 
 import * as fs from 'fs-extra'
-import {LogEntry, ROOT_ENTRY} from './LogEntry'
+import {Commit, ROOT_ENTRY} from './Commit'
 import * as path from 'path'
 import {dirName, fileName} from './Utility'
 
@@ -15,7 +15,7 @@ export class LogManager {
     this.assertLock()
     this.lock()
     const head = await this.head()
-    const log = new LogEntry(message, head)
+    const log = new Commit(message, head)
     const hash = log.digest()
     const file = this.objectPath(hash)
     await fs.ensureFile(file)
@@ -62,9 +62,9 @@ export class LogManager {
     }
   }
 
-  async catHash(hash: string): Promise<LogEntry<any>> {
+  async catHash(hash: string): Promise<Commit<any>> {
     const buffer = await fs.readFile(this.objectPath(hash))
-    return LogEntry.fromBuffer(buffer)
+    return Commit.fromBuffer(buffer)
   }
 
   async logs(start: number, end: number) {
