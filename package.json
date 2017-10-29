@@ -34,7 +34,6 @@
   "workspaces": [
     "client",
     "server",
-    "core",
-    "stream"
+    "core"
   ]
 }
