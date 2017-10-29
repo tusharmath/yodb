@@ -7,9 +7,10 @@ import {readHead} from './lib/head'
 import {commit} from './lib/commit'
 import {catDataNode} from './lib/cat-node'
 import {logSlice} from './lib/log-slice'
+import * as path from './lib/file-paths'
 
 export class YoDb {
-  constructor(private dir: string) {}
+  constructor(private dir: string = path.defaultDir()) {}
 
   async commit<T>(message: T): Promise<string> {
     return await commit(this.dir, message)
