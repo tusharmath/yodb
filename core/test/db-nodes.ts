@@ -3,7 +3,7 @@
  */
 
 import * as assert from 'assert'
-import {DBNode, MAX_LOG_HEADER_SIZE, MAX_LOG_SIZE} from '../lib/db-nodes'
+import {DBNode, MAX_LOG_HEADER_SIZE, MAX_LOG_SIZE} from '../src/db-nodes'
 
 const TEST_DIGEST = '2d86ca126688af1984556e74343c2982'
 const TEST_DATA = Buffer.from('APPLE')

@@ -4,9 +4,9 @@
 import * as path from 'path'
 import * as assert from 'assert'
 import * as fs from 'fs-extra'
-import {YoDb} from '../index'
-import {ROOT_NODE} from '../lib/root-node'
-import {DataNode} from '../lib/db-nodes'
+import {YoDb} from '../src/yodb'
+import {ROOT_NODE} from '../src/root-node'
+import {DataNode} from '../src/db-nodes'
 
 const disk = path.resolve(__dirname, '.yodb')
 
