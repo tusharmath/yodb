@@ -4,7 +4,7 @@
 import * as path from 'path'
 import * as assert from 'assert'
 import * as fs from 'fs-extra'
-import {LogManager} from '../lib/log-manager'
+import {YoDb} from '../index'
 import {ROOT_NODE} from '../lib/root-node'
 import {DataNode} from '../lib/db-nodes'
 
@@ -12,9 +12,9 @@ const disk = path.resolve(__dirname, '.yodb')
 
 const TEST_DATA = {a: 1}
 const TEST_DATA_DIGEST = '80e8e7d6834b2b50b98e2f934ce1a20e'
-describe('LogManager', function() {
+describe('YoDb', function() {
   beforeEach(async function() {
-    this.logger = new LogManager(disk)
+    this.logger = new YoDb(disk)
   })
 
   afterEach(async function() {
