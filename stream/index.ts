@@ -2,7 +2,7 @@
  * Created by tushar on 29/10/17.
  */
 
-import {Transform, TransformOptions} from 'stream'
+import {Stream, Transform, TransformOptions} from 'stream'
 
 /**
  * Creates a new NodeJS based {Transform} stream
@@ -30,4 +30,16 @@ export const createTransform = (
       options
     )
   )
+}
+
+/**
+ * Converts a stream into a promise
+ * @param {"stream".internal.Stream} stream
+ * @return {Promise}
+ */
+export const wait = (stream: Stream) => {
+  return new Promise((resolve, reject) => {
+    stream.on('end', resolve)
+    stream.on('error', reject)
+  })
 }

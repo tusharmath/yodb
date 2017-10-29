@@ -1,5 +1,5 @@
 {
-  "name": "@yodb/streams",
+  "name": "@yodb/stream",
   "version": "1.0.0",
   "description": "Node.js stream utils for YoDB",
   "main": "index.js",
