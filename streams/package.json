@@ -1,0 +1,11 @@
+{
+  "name": "@yodb/streams",
+  "version": "1.0.0",
+  "description": "Node.js stream utils for YoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC"
+}
