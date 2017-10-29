@@ -6,22 +6,14 @@ import * as fs from 'fs-extra'
 import {DataNode, DBNode} from './db-nodes'
 import {ROOT_NODE} from './root-node'
 import * as path from './file-paths'
-import {writeNode} from './node-writer'
-import {getLock, releaseLock} from './db-lock'
-import {readHead, writeHead} from './head'
+import {readHead} from './head'
+import {commit} from './commit'
 
 export class LogManager {
   constructor(private dir: string) {}
 
   async commit<T>(message: T): Promise<string> {
-    const dir = this.dir
-    getLock(dir)
-    const node = new DataNode(await readHead(dir), message)
-    const hash = await writeNode(dir, node)
-    await fs.ensureFile(path.head(dir))
-    await writeHead(dir, hash)
-    releaseLock(dir)
-    return hash
+    return await commit(this.dir, message)
   }
 
   head() {
