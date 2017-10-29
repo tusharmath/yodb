@@ -6,37 +6,20 @@ import * as fs from 'fs-extra'
 import {DataNode, DBNode} from './db-nodes'
 import {ROOT_NODE} from './root-node'
 import * as path from './file-paths'
-import {writeNode} from "./node-writer";
+import {writeNode} from './node-writer'
+import {getLock, releaseLock} from './db-lock'
 
 export class LogManager {
-  private isLocked = false
   constructor(private dir: string) {}
 
   async commit<T>(message: T): Promise<string> {
-    this.assertLock()
-    this.lock()
+    getLock(this.dir)
     const node = new DataNode(await this.head(), message)
     const hash = await writeNode(this.dir, node)
     await fs.ensureFile(path.head(this.dir))
     await fs.writeFile(path.head(this.dir), hash)
-    this.unlock()
+    releaseLock(this.dir)
     return hash
-  }
-
-  private lock() {
-    fs.ensureFileSync(path.lock(this.dir))
-    this.isLocked = true
-  }
-
-  private unlock() {
-    fs.unlinkSync(path.lock(this.dir))
-    this.isLocked = false
-  }
-
-  private assertLock() {
-    if (this.isLocked) {
-      throw new TypeError('Only one commit at a time can be made')
-    }
   }
 
   async head(): Promise<string> {
