@@ -33,6 +33,15 @@ describe('LogManager', function() {
       const head = await log.head()
       assert.equal(head, TEST_DATA_DIGEST)
     })
+
+    it('should create a file inside /refs', async function() {
+      const log = this.logger
+      const headPath = path.resolve(disk, 'refs', 'HEAD')
+      const currentHead = await fs.access(headPath).catch(() => false)
+      assert.ok(!currentHead)
+      await log.commit(TEST_DATA)
+      await fs.access(headPath)
+    })
   })
 
   describe('logs()', function() {

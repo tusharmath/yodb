@@ -21,6 +21,7 @@ export class LogManager {
     const hash = log.digest()
     const file = this.objectPath(hash)
     await fs.ensureFile(file)
+    await fs.ensureFile(this.headPath())
     await fs.writeFile(file, log.toBuffer())
     await fs.writeFile(this.headPath(), hash)
     this.unlock()
@@ -48,7 +49,7 @@ export class LogManager {
   }
 
   private headPath(): string {
-    return path.resolve(this.dir, 'HEAD')
+    return path.resolve(this.dir, 'refs', 'HEAD')
   }
 
   private lockPath(): string {
