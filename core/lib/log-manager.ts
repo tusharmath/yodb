@@ -2,12 +2,11 @@
  * Created by tushar on 25/10/17.
  */
 
-import * as fs from 'fs-extra'
-import {DataNode, DBNode} from './db-nodes'
+import {DBNode} from './db-nodes'
 import {ROOT_NODE} from './root-node'
-import * as path from './file-paths'
 import {readHead} from './head'
 import {commit} from './commit'
+import {catDataNode} from './cat-node'
 
 export class LogManager {
   constructor(private dir: string) {}
@@ -21,8 +20,7 @@ export class LogManager {
   }
 
   async catHash(hash: string): Promise<DBNode> {
-    const buffer = await fs.readFile(path.hash(this.dir, hash))
-    return DataNode.fromBuffer(buffer)
+    return await catDataNode(this.dir, hash)
   }
 
   async logs(start: number, end: number) {
