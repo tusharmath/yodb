@@ -9,9 +9,7 @@ const atob = (str: string) => new Buffer(str).toString('base64')
 export const dbURL = () =>
   'yodb://' + atob(ip.address() + ':' + server.address().port)
 
-const server = net.createServer(function(sock) {
-  sock.end('Hello world\n')
-})
+const server = net.createServer()
 server.listen(0, () => {
   console.log('Started ' + dbURL())
 })
