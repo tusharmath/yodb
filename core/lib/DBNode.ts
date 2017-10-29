@@ -21,7 +21,7 @@ const assertParentSize = (hash: string) => {
   }
 }
 
-export class Node {
+export class DBNode {
   /**
    * Creates a serializable Commit
    * @param {string} parent - hash of the parent node
@@ -41,7 +41,7 @@ export class Node {
   static fromBuffer(buffer: Buffer) {
     const parent = buffer.slice(0, MAX_LOG_HEADER_SIZE / 2).toString(HEX)
     const data = buffer.slice(MAX_LOG_HEADER_SIZE / 2)
-    return new Node(parent, data)
+    return new DBNode(parent, data)
   }
 
   toBuffer() {

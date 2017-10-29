@@ -3,10 +3,11 @@
  */
 
 import * as fs from 'fs-extra'
-import {Node} from './Node'
+import {DBNode} from './DBNode'
 import {ROOT_NODE} from './RootNode'
 import {DataNode} from './DataNode'
 import * as path from './Paths'
+import {writeNode} from "./NodeWriter";
 
 export class LogManager {
   private isLocked = false
@@ -15,15 +16,10 @@ export class LogManager {
   async commit<T>(message: T): Promise<string> {
     this.assertLock()
     this.lock()
-    const head = await this.head()
-    const log = new DataNode(head, message)
-    const hash = log.digest()
-    const file = path.hash(this.dir, hash)
-    await Promise.all([fs.ensureFile(file), fs.ensureFile(path.head(this.dir))])
-    await Promise.all([
-      fs.writeFile(file, log.toBuffer()),
-      fs.writeFile(path.head(this.dir), hash)
-    ])
+    const node = new DataNode(await this.head(), message)
+    const hash = await writeNode(this.dir, node)
+    await fs.ensureFile(path.head(this.dir))
+    await fs.writeFile(path.head(this.dir), hash)
     this.unlock()
     return hash
   }
@@ -53,7 +49,7 @@ export class LogManager {
     }
   }
 
-  async catHash(hash: string): Promise<Node> {
+  async catHash(hash: string): Promise<DBNode> {
     const buffer = await fs.readFile(path.hash(this.dir, hash))
     return DataNode.fromBuffer(buffer)
   }

@@ -2,14 +2,14 @@
  * Created by tushar on 29/10/17.
  */
 import {buftoj, jtobuf} from './Utility'
-import {Node} from './Node'
+import {DBNode} from './DBNode'
 
-export class DataNode<T> extends Node {
+export class DataNode<T> extends DBNode {
   constructor(readonly parent: string, readonly message: T) {
     super(parent, jtobuf(message))
   }
   static fromBuffer(buffer: Buffer) {
-    const node = Node.fromBuffer(buffer)
+    const node = DBNode.fromBuffer(buffer)
     return new DataNode(node.parent, buftoj(node.data))
   }
 }
