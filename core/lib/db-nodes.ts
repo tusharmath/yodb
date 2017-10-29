@@ -4,6 +4,7 @@
 
 import * as crypto from 'crypto'
 import {HEX} from '../encodings'
+import {buftoj, jtobuf} from "./utils";
 
 export const HASH_ALGORITHM = 'md5'
 export const MAX_LOG_SIZE = 10 * 1024 // 10kb
@@ -46,5 +47,15 @@ export class DBNode {
 
   toBuffer() {
     return Buffer.concat([Buffer.from(this.parent, HEX), this.data])
+  }
+}
+
+export class DataNode<T> extends DBNode {
+  constructor(readonly parent: string, readonly message: T) {
+    super(parent, jtobuf(message))
+  }
+  static fromBuffer(buffer: Buffer) {
+    const node = DBNode.fromBuffer(buffer)
+    return new DataNode(node.parent, buftoj(node.data))
   }
 }

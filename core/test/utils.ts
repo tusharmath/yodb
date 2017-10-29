@@ -3,7 +3,7 @@
  */
 
 import * as assert from 'assert'
-import {dirName, fileName} from '../lib/Utility'
+import {dirName, fileName} from '../lib/utils'
 
 describe('Utility', function() {
   describe('dirName()', () => {

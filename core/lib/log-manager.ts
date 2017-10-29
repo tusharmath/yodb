@@ -3,11 +3,10 @@
  */
 
 import * as fs from 'fs-extra'
-import {DBNode} from './DBNode'
-import {ROOT_NODE} from './RootNode'
-import {DataNode} from './DataNode'
-import * as path from './Paths'
-import {writeNode} from "./NodeWriter";
+import {DataNode, DBNode} from './db-nodes'
+import {ROOT_NODE} from './root-node'
+import * as path from './file-paths'
+import {writeNode} from "./node-writer";
 
 export class LogManager {
   private isLocked = false

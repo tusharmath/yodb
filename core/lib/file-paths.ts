@@ -3,7 +3,7 @@
  */
 
 import * as path from 'path'
-import {dirName, fileName} from './Utility'
+import {dirName, fileName} from './utils'
 
 export const hash = (dir: string, hash: string) =>
   path.resolve(dir, 'objects', dirName(hash), fileName(hash))

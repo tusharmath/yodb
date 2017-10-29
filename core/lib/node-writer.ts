@@ -3,12 +3,12 @@
  */
 
 import * as fs from 'fs-extra'
-import * as paths from './Paths'
-import {DBNode} from "./DBNode";
+import * as paths from './file-paths'
+import {DBNode} from "./db-nodes";
 
 
 /**
- * Save a dbNode and saves it on the disk
+ * saves a {DBNode} on the disk
  * @param {string} dir
  * @param {DBNode} node
  * @return {Promise<string>}
