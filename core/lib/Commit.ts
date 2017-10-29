@@ -3,60 +3,48 @@
  */
 
 import * as crypto from 'crypto'
-import pad = require('pad')
+import {HEX} from '../encodings'
 
+export const HASH_ALGORITHM = 'md5'
 export const MAX_LOG_SIZE = 10 * 1024 // 10kb
-export const MAX_LOG_HEADER_SIZE = 512 // 512byte
-const HASH_ALGORITHM = 'md5'
+export const MAX_LOG_HEADER_SIZE = 32 // 32bytes because md5 is 32 bytes
 
-export type LogHeader = {
-  size: number
-  parent: string
+const assertDataSize = (content: Buffer) => {
+  if (content.length > MAX_LOG_SIZE - MAX_LOG_HEADER_SIZE) {
+    throw Error(`Message is longer than allowed limit of ${MAX_LOG_SIZE} bytes`)
+  }
 }
 
+const assertParentSize = (hash: string) => {
+  if (hash.length !== 32) {
+    throw Error(`Invalid parent node: ${hash}`)
+  }
+}
 
-export class Commit<T> {
-  constructor(readonly content: T, private parent: string) {}
-
-  private getContentBuffer() {
-    const buffer = new Buffer(JSON.stringify(this.content))
-    if (buffer.length > MAX_LOG_SIZE - MAX_LOG_HEADER_SIZE) {
-      throw Error(
-        `Message is longer than allowed limit of ${MAX_LOG_SIZE} bytes`
-      )
-    }
-    return buffer
+export class Commit {
+  /**
+   * Creates a serializable Commit
+   * @param {string} parent - hash of the parent node
+   * @param {Buffer} data - data buffer
+   */
+  constructor(readonly parent: string, readonly data: Buffer) {
+    assertDataSize(data)
+    assertParentSize(parent)
   }
 
   digest() {
     const hash = crypto.createHash(HASH_ALGORITHM)
-    hash.update(JSON.stringify(this.content) + this.parent)
-    return hash.digest().toString('hex')
+    hash.update(this.toBuffer())
+    return hash.digest().toString(HEX)
   }
 
-  static fromBuffer<T>(buffer: Buffer) {
-    const {size, parent} = JSON.parse(
-      buffer.slice(0, MAX_LOG_HEADER_SIZE).toString('utf-8')
-    ) as LogHeader
-    const start = MAX_LOG_HEADER_SIZE
-    const data = buffer.slice(start, start + size).toString('utf-8')
-    return new Commit<T>(JSON.parse(data), parent)
-  }
-
-  header(): LogHeader {
-    return {
-      size: this.getContentBuffer().length,
-      parent: this.parent
-    }
+  static fromBuffer(buffer: Buffer) {
+    const parent = buffer.slice(0, MAX_LOG_HEADER_SIZE / 2).toString(HEX)
+    const data = buffer.slice(MAX_LOG_HEADER_SIZE / 2)
+    return new Commit(parent, data)
   }
 
   toBuffer() {
-    // header
-    const header = pad(JSON.stringify(this.header()), MAX_LOG_HEADER_SIZE)
-    const headerBuffer = new Buffer(MAX_LOG_HEADER_SIZE)
-    headerBuffer.write(header, 0, MAX_LOG_HEADER_SIZE, 'utf-8')
-
-    // data
-    return Buffer.concat([headerBuffer, this.getContentBuffer()])
+    return Buffer.concat([Buffer.from(this.parent, HEX), this.data])
   }
 }

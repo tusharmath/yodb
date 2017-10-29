@@ -10,7 +10,7 @@ import {Commit} from '../lib/Commit'
 const disk = path.resolve(__dirname, '.yodb')
 
 const TEST_DATA = {a: 1}
-const TEST_DATA_DIGEST = 'f24c2c56bffd7c6eba15f2946a84785a'
+const TEST_DATA_DIGEST = '80e8e7d6834b2b50b98e2f934ce1a20e'
 describe('LogManager', function() {
   beforeEach(async function() {
     this.logger = new LogManager(disk)
@@ -35,11 +35,10 @@ describe('LogManager', function() {
     })
 
     it('should create a file inside /refs', async function() {
-      const log = this.logger
       const headPath = path.resolve(disk, 'refs', 'HEAD')
       const currentHead = await fs.access(headPath).catch(() => false)
       assert.ok(!currentHead)
-      await log.commit(TEST_DATA)
+      await this.logger.commit(TEST_DATA)
       await fs.access(headPath)
     })
   })
@@ -69,10 +68,9 @@ describe('LogManager', function() {
 
   describe('catHash()', function() {
     it('should read data using digest', async function() {
-      const message = 'APPLE'
-      const hash = await this.logger.commit(message)
+      const hash = await this.logger.commit(TEST_DATA)
       const actual = await this.logger.catHash(hash)
-      const expected = new Commit(message, ROOT_ENTRY)
+      const expected = new Commit(ROOT_ENTRY, Buffer.from(JSON.stringify(TEST_DATA)))
       assert.deepEqual(actual, expected)
     })
   })

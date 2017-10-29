@@ -5,9 +5,12 @@
 import * as fs from 'fs-extra'
 import {Commit} from './Commit'
 import * as path from 'path'
-import {dirName, fileName} from './Utility'
+import {dirName, fileName, jtobuf} from './Utility'
 
-export const ROOT_ENTRY = '<--###ROOT#ENTRY###-->'
+export const ROOT_ENTRY = [
+  ['0000', '0000', '0000', '0000'].join(''),
+  ['0000', '0000', '0000', '0000'].join('')
+].join('')
 
 export class LogManager {
   private isLocked = false
@@ -17,7 +20,7 @@ export class LogManager {
     this.assertLock()
     this.lock()
     const head = await this.head()
-    const log = new Commit(message, head)
+    const log = new Commit(head, jtobuf(message))
     const hash = log.digest()
     const file = this.objectPath(hash)
     await fs.ensureFile(file)
@@ -65,7 +68,7 @@ export class LogManager {
     }
   }
 
-  async catHash(hash: string): Promise<Commit<any>> {
+  async catHash(hash: string): Promise<Commit> {
     const buffer = await fs.readFile(this.objectPath(hash))
     return Commit.fromBuffer(buffer)
   }
@@ -77,7 +80,7 @@ export class LogManager {
     while (i <= end && head !== ROOT_ENTRY) {
       const log = await this.catHash(head)
       if (i >= start && i < end) data.push(head)
-      head = log.header().parent
+      head = log.parent
       i++
     }
     return data
