@@ -10,8 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "@types/ip": "^0.0.30",
-    "@types/public-ip": "^2.3.0",
-    "ip": "^1.1.5",
-    "public-ip": "^2.3.5"
+    "ip": "^1.1.5"
   }
 }

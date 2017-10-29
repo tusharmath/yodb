@@ -4,7 +4,6 @@
 
 import * as net from 'net'
 import * as ip from 'ip'
-import * as pubIP from 'public-ip'
 
 const atob = (str: string) => new Buffer(str).toString('base64')
 export const dbURL = () =>
@@ -13,7 +12,6 @@ export const dbURL = () =>
 const server = net.createServer(function(sock) {
   sock.end('Hello world\n')
 })
-server.listen(0, async function() {
-  console.log(await pubIP.v4())
+server.listen(0, () => {
   console.log('Started ' + dbURL())
 })
