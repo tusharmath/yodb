@@ -5,7 +5,7 @@
   "description": "A pure javascript based persistent key value store",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha core/test;mocha server/test;mocha client/test"
   },
   "repository": {
     "type": "git",
