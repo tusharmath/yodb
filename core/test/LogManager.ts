@@ -5,7 +5,7 @@ import * as path from 'path'
 import * as assert from 'assert'
 import * as fs from 'fs-extra'
 import {LogManager, ROOT_ENTRY} from '../lib/LogManager'
-import {Commit} from '../lib/Commit'
+import {Node} from '../lib/Node'
 
 const disk = path.resolve(__dirname, '.yodb')
 
@@ -70,7 +70,7 @@ describe('LogManager', function() {
     it('should read data using digest', async function() {
       const hash = await this.logger.commit(TEST_DATA)
       const actual = await this.logger.catHash(hash)
-      const expected = new Commit(ROOT_ENTRY, Buffer.from(JSON.stringify(TEST_DATA)))
+      const expected = new Node(ROOT_ENTRY, Buffer.from(JSON.stringify(TEST_DATA)))
       assert.deepEqual(actual, expected)
     })
   })

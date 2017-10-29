@@ -3,7 +3,7 @@
  */
 
 import * as fs from 'fs-extra'
-import {Commit} from './Commit'
+import {Node} from './Node'
 import * as path from 'path'
 import {dirName, fileName, jtobuf} from './Utility'
 
@@ -20,7 +20,7 @@ export class LogManager {
     this.assertLock()
     this.lock()
     const head = await this.head()
-    const log = new Commit(head, jtobuf(message))
+    const log = new Node(head, jtobuf(message))
     const hash = log.digest()
     const file = this.objectPath(hash)
     await fs.ensureFile(file)
@@ -68,9 +68,9 @@ export class LogManager {
     }
   }
 
-  async catHash(hash: string): Promise<Commit> {
+  async catHash(hash: string): Promise<Node> {
     const buffer = await fs.readFile(this.objectPath(hash))
-    return Commit.fromBuffer(buffer)
+    return Node.fromBuffer(buffer)
   }
 
   async logs(start: number, end: number) {
