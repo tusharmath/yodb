@@ -3,4 +3,6 @@ node_js:
 - 'stable'
 before_script:
 - yarn tsc
-- yarn test
+- mocha core/test
+- mocha server/test
+- mocha client/test
