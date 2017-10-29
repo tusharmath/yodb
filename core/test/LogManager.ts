@@ -4,8 +4,9 @@
 import * as path from 'path'
 import * as assert from 'assert'
 import * as fs from 'fs-extra'
-import {LogManager, ROOT_ENTRY} from '../lib/LogManager'
-import {Node} from '../lib/Node'
+import {LogManager} from '../lib/LogManager'
+import {ROOT_NODE} from '../lib/RootNode'
+import {DataNode} from '../lib/DataNode'
 
 const disk = path.resolve(__dirname, '.yodb')
 
@@ -24,7 +25,7 @@ describe('LogManager', function() {
     it('should return ROOT if nothing is written', async function() {
       const log = this.logger
       const head = await log.head()
-      assert.equal(head, ROOT_ENTRY)
+      assert.equal(head, ROOT_NODE)
     })
 
     it('should return head digest', async function() {
@@ -70,7 +71,7 @@ describe('LogManager', function() {
     it('should read data using digest', async function() {
       const hash = await this.logger.commit(TEST_DATA)
       const actual = await this.logger.catHash(hash)
-      const expected = new Node(ROOT_ENTRY, Buffer.from(JSON.stringify(TEST_DATA)))
+      const expected = new DataNode(ROOT_NODE, TEST_DATA)
       assert.deepEqual(actual, expected)
     })
   })
