@@ -1,0 +1,14 @@
+{
+  "name": "@yodb/storage",
+  "version": "1.0.0",
+  "description": "Storage client for yodb",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^4.0.2"
+  }
+}
