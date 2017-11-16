@@ -1,6 +1,9 @@
 language: node_js
 node_js:
 - 'stable'
+before_install:
+  - npm i -g yarn
+  - export PATH="$HOME/.yarn/bin:$PATH"
 before_script:
-- yarn tsc
-- yarn test
+  - yarn tsc
+  - yarn test
